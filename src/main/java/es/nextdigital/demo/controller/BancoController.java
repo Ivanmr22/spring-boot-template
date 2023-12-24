@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.nextdigital.demo.model.IngresarDineroRequest;
 import es.nextdigital.demo.model.Movimiento;
 import es.nextdigital.demo.model.SacarDineroRequest;
+import es.nextdigital.demo.model.TransferenciaRequest;
 import es.nextdigital.demo.service.CuentaService;
 
 @RestController
@@ -62,8 +63,14 @@ public class BancoController {
 		return;
 	}
 
+	/*
+	 * TODO -> Faltaría:
+	 * - Que no se pueda realizar la transferencia si no tiene suficiente saldo para hacerla
+	 * - Mostrar error si el IBAN de destino no es válido
+	 */
 	@PostMapping("/transferencia")
-	public void realizarTransferencia() {
+	public void realizarTransferencia(@RequestBody TransferenciaRequest request) {
+		cuentaService.realizarTransferencia(request.getNumeroTarjeta(), request.getCantidad(), request.getIBANDestino());
 		return;
 	}
 

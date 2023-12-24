@@ -1,6 +1,5 @@
 package es.nextdigital.demo.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +59,7 @@ public class CuentaService {
 
 			Tarjeta tarjeta = tarjetaEncontrada.get();
 			Cuenta cuentaAsociada = tarjeta.getCuentaAsociada();
-			cuentaAsociada.setSaldo(cuentaAsociada.getSaldo() + (tipo == "INGRESO" ? cantidad : -(cantidad)));
+			cuentaAsociada.setSaldo(cuentaAsociada.getSaldo() + (tipo == "INGRESO" || tipo == "TRANSFERENCIA_ENTRANTE" ? cantidad : -(cantidad)));
 			repository.save(cuentaAsociada);
 
 			Movimiento nuevoMovimiento = new Movimiento(null, cantidad, tipo, cuentaAsociada);
@@ -68,5 +67,40 @@ public class CuentaService {
 		}
 
 		return;
+	}
+
+	
+	/*
+	 * TODO -> Esto debería ser transaccional (si algo falla, se hace rollback de todo)
+	 */
+	public void realizarTransferencia(String numeroTarjeta, double cantidad, String ibanDestino) {
+		
+		realizarMovimiento(numeroTarjeta, cantidad, "TRANSFERENCIA_SALIENTE");
+		
+		
+		if(isIBANInterno(ibanDestino)) {
+			
+			Optional<Cuenta> cuentaEncontrada = repository.findByIBAN(ibanDestino);
+			
+			if(cuentaEncontrada.isPresent()) {
+				Cuenta cuenta = cuentaEncontrada.get();
+				Movimiento nuevoMovimiento = new Movimiento(null, cantidad, "TRANSFERENCIA_ENTRANTE", cuenta);
+				movimientoRepository.save(nuevoMovimiento);
+				
+				cuenta.setSaldo(cuenta.getSaldo() + cantidad);
+				repository.save(cuenta);
+			}
+		} else {
+			// TODO -> En este caso el banco se comunicaría con el banco del IBAN de destino para realizar la transferencia
+		}
+	}
+	
+	/**
+	 * Evalua si el IBAN dado es un IBAN del banco propio o un IBAN de un banco externo
+	 * 
+	 * Por propositos de tiempo, devolveré true y suponemos que todas las transferencias son internas
+	 */
+	private boolean isIBANInterno(String IBAN) {
+		return true;
 	}
 }

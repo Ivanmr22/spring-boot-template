@@ -30,13 +30,19 @@ public class DataInitializer implements ApplicationRunner {
     
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        Cuenta cuenta1 = new Cuenta(1L, "ES9121000418450200051332", 0);
+        Cuenta cuenta1 = new Cuenta(1L, "ES9121000418450200051332", 20.0);
         cuentaRepository.save(cuenta1);
+        
+        Cuenta cuenta2 = new Cuenta(2L, "ES9121000418450200051333", 0);
+        cuentaRepository.save(cuenta2);
         
         Movimiento mov1 = new Movimiento(1L, 20, "INGRESO", cuenta1);
         movimientoRepository.save(mov1);
         
         Tarjeta tarjeta1 = new Tarjeta(1L, "4556424242424242", "0000", false, cuenta1);
         tarjetaRepository.save(tarjeta1);
+        
+        Tarjeta tarjeta2 = new Tarjeta(2L, "4556424242424243", "0000", false, cuenta2);
+        tarjetaRepository.save(tarjeta2);
     }
 }
