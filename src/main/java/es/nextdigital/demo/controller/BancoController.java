@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.nextdigital.demo.model.IngresarDineroRequest;
 import es.nextdigital.demo.model.Movimiento;
 import es.nextdigital.demo.model.SacarDineroRequest;
 import es.nextdigital.demo.service.CuentaService;
@@ -49,9 +50,15 @@ public class BancoController {
 		
 		return;
 	}
-
+	
+	/*
+	 * TODO -> Faltaría:
+	 * - Validar que pueda realizar el ingreso solo si el cajero es del mismo banco. No se puede ingresar dinero desde cajeros de otras entidades.
+	 * - Lanzar error si el numero de tarjeta no existe
+	 */
 	@PostMapping("/ingreso")
-	public void ingresarDinero() {
+	public void ingresarDinero(@RequestBody IngresarDineroRequest request) {
+		cuentaService.ingresarDinero(request.getNumeroTarjeta(), request.getCantidad());
 		return;
 	}
 

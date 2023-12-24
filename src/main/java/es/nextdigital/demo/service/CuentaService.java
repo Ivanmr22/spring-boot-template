@@ -46,20 +46,27 @@ public class CuentaService {
 	}
 
 	public void sacarDinero(String numeroTarjeta, double cantidad) {
-		
+		realizarMovimiento(numeroTarjeta, cantidad, "RETIRADA");
+	}
+
+	public void ingresarDinero(String numeroTarjeta, double cantidad) {
+		realizarMovimiento(numeroTarjeta, cantidad, "INGRESO");
+	}
+
+	public void realizarMovimiento(String numeroTarjeta, double cantidad, String tipo) {
 		Optional<Tarjeta> tarjetaEncontrada = tarjetaRepository.findByNumeroTarjeta(numeroTarjeta);
-		
-		if(tarjetaEncontrada.isPresent()) {
-			
+
+		if (tarjetaEncontrada.isPresent()) {
+
 			Tarjeta tarjeta = tarjetaEncontrada.get();
 			Cuenta cuentaAsociada = tarjeta.getCuentaAsociada();
-			cuentaAsociada.setSaldo(cuentaAsociada.getSaldo() - cantidad);
+			cuentaAsociada.setSaldo(cuentaAsociada.getSaldo() + (tipo == "INGRESO" ? cantidad : -(cantidad)));
 			repository.save(cuentaAsociada);
-			
-			Movimiento nuevoMovimiento = new Movimiento(null, cantidad, "RETIRADA", cuentaAsociada);
+
+			Movimiento nuevoMovimiento = new Movimiento(null, cantidad, tipo, cuentaAsociada);
 			movimientoRepository.save(nuevoMovimiento);
 		}
-				
+
 		return;
 	}
 }
