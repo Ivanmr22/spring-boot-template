@@ -39,10 +39,10 @@ public class DataInitializer implements ApplicationRunner {
         Movimiento mov1 = new Movimiento(1L, 20, "INGRESO", cuenta1);
         movimientoRepository.save(mov1);
         
-        Tarjeta tarjeta1 = new Tarjeta(1L, "4556424242424242", "0000", false, cuenta1);
+        Tarjeta tarjeta1 = new Tarjeta(1L, "4556424242424242", "0000", false, cuenta1, true);
         tarjetaRepository.save(tarjeta1);
         
-        Tarjeta tarjeta2 = new Tarjeta(2L, "4556424242424243", "0000", false, cuenta2);
+        Tarjeta tarjeta2 = new Tarjeta(2L, "4556424242424243", "0000", false, cuenta2, true);
         tarjetaRepository.save(tarjeta2);
     }
 }

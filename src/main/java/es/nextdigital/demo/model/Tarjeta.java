@@ -20,6 +20,8 @@ public class Tarjeta {
 	
 	private boolean isCredito;
 	
+	private boolean isActiva;
+	
 	@ManyToOne
 	@JoinColumn(name = "idCuenta")
 	private Cuenta cuentaAsociada;
@@ -28,13 +30,14 @@ public class Tarjeta {
 		super();
 	}
 
-	public Tarjeta(Long id, String numeroTarjeta, String pin, boolean isCredito, Cuenta cuentaAsociada) {
+	public Tarjeta(Long id, String numeroTarjeta, String pin, boolean isCredito, Cuenta cuentaAsociada, boolean isActiva) {
 		super();
 		this.id = id;
 		this.numeroTarjeta = numeroTarjeta;
 		this.pin = pin;
 		this.isCredito = isCredito;
 		this.cuentaAsociada = cuentaAsociada;
+		this.isActiva = isActiva;
 	}
 
 	public Long getId() {
@@ -75,6 +78,14 @@ public class Tarjeta {
 
 	public void setCuentaAsociada(Cuenta cuentaAsociada) {
 		this.cuentaAsociada = cuentaAsociada;
+	}
+
+	public boolean isActiva() {
+		return isActiva;
+	}
+
+	public void setActiva(boolean isActiva) {
+		this.isActiva = isActiva;
 	}
 
 }

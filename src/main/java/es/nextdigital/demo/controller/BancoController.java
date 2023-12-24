@@ -10,22 +10,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.nextdigital.demo.model.ActivarTarjetaRequest;
 import es.nextdigital.demo.model.IngresarDineroRequest;
 import es.nextdigital.demo.model.Movimiento;
 import es.nextdigital.demo.model.SacarDineroRequest;
 import es.nextdigital.demo.model.TransferenciaRequest;
 import es.nextdigital.demo.service.CuentaService;
+import es.nextdigital.demo.service.TarjetaService;
 
 @RestController
 @RequestMapping("/banco")
 public class BancoController {
 	
 	private CuentaService cuentaService;
+	private TarjetaService tarjetaService;
 	
 	@Autowired
-	public BancoController(CuentaService cuentaService) {
+	public BancoController(CuentaService cuentaService, TarjetaService tarjetaService) {
 		super();
 		this.cuentaService = cuentaService;
+		this.tarjetaService = tarjetaService;
 	}
 
 	/*
@@ -74,8 +78,13 @@ public class BancoController {
 		return;
 	}
 
+	/*
+	 * TODO -> Faltaría
+	 * - Indicar que la tarjeta dada ya ha sido activada en caso de que ya lo esté
+	 */
 	@PostMapping("/activacionTarjeta")
-	public void activarTarjeta() {
+	public void activarTarjeta(@RequestBody ActivarTarjetaRequest request) {
+		tarjetaService.activarTarjeta(request.getNumeroTarjeta());
 		return;
 	}
 
